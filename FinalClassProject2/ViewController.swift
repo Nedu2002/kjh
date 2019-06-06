@@ -8,22 +8,24 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+class ViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     struct OrgImg {
         static var name = UIImage.init()
         
     }
     
+    
+   
     @IBOutlet weak var ImgViewController: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        OrgImg.name = ImgViewController.image!
-        
-        
+               OrgImg.name = ImgViewController.image!
+        ImgPicker.delegate = self
         // Do any additional setup after loading the view.
         
     }
+    
     
     @IBAction func ChaneImage(_ sender: Any) {
         
@@ -62,43 +64,36 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
 }
     
+        
     
-    @IBAction func ChangEffect2(_ sender: Any) {
-        
-        let inputImg = ImgViewController.image!
-        
-        
-        let rawImg = CIImage(image: inputImg)
-        
-        //let CropParams: [String : Any] = [kCIInputImageKey : rawImg  ]    }    }
-        
-        let cropParams: [String : Any] =
-        let inputImage = kCIAttributeTypeGradient(name: "CIColorMap", parameters: CropParams)
-        
-        let context = CIContext(options: nil)
-        
-        if let output = SepiaFilter?.inputImage{
-            
-            if let ciImg = context.createCIImage(output, from: output.extent){
-                
-                ImgViewController.image = UIImage(cgImage:ciImg)
-                
-                
-                
-                
-                
-                
-                
     
-}
+    @IBOutlet weak var ImgPlaceHolder: UIImageView!
+    var ImgPicker = UIImagePickerController()
     
-            func ResetBtn(_ sender: Any) {
+    
+    func ResetBtn(_ sender: Any) {
         ImgViewController.image = OrgImg.name
+       
+    }
+    
+    @IBAction func BtnClick(_ sender: Any) {
+        ImgPicker.sourceType = .photoLibrary
         
+        present(ImgPicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        let userSelection = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        
+            //info[UIImagePickerController.InfoKey.editedImage] as? UIImagePickerController
+        
+        ImgPlaceHolder.image = userSelection
+        
+        dismiss(animated: true, completion: nil)
         
     }
     
 }
-}
-    
-}
+
+
